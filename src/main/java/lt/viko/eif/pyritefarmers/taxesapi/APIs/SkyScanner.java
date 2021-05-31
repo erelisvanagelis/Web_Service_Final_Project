@@ -5,14 +5,13 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import lt.viko.eif.pyritefarmers.taxesapi.models.Options;
 import lt.viko.eif.pyritefarmers.taxesapi.models.Place;
+import lt.viko.eif.pyritefarmers.taxesapi.models.PlaceQuote;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,8 +68,8 @@ public class SkyScanner {
         JSONArray jsonArray = (JSONArray) jsonObject.get("Places");
 
         List<Place> places = new ArrayList<>();
-        for (int i = 0; i < jsonArray.size(); i++){
-            JSONObject placeJson = (JSONObject) jsonArray.get(i);
+        for (Object o : jsonArray) {
+            JSONObject placeJson = (JSONObject) o;
             places.add(new Place(
                     placeJson.get("PlaceId").toString(),
                     placeJson.get("PlaceName").toString(),
@@ -82,4 +81,41 @@ public class SkyScanner {
         }
         return places;
     }
+
+    public static List<Place> getQuotesSimplified(Options options) throws IOException, ParseException {
+        JSONObject jsonObject = getBrowseQuotesService(options);
+        JSONArray jsonArray = (JSONArray) jsonObject.get("Places");
+
+        List<Place> places = new ArrayList<>();
+        for (Object o : jsonArray) {
+            JSONObject placeJson = (JSONObject) o;
+            places.add(new Place(
+                    placeJson.get("PlaceId").toString(),
+                    placeJson.get("PlaceName").toString(),
+                    placeJson.get("CountryId").toString(),
+                    placeJson.get("RegionId").toString(),
+                    placeJson.get("CityId").toString(),
+                    placeJson.get("CountryName").toString()
+            ));
+        }
+        return places;
+    }
+/*
+    public static List<PlaceQuote> getQuotesSimplified(JSONObject jsonObject) throws IOException, ParseException {
+        JSONArray jsonArray = (JSONArray) jsonObject.get("Places");
+
+        List<Place> places = new ArrayList<>();
+        for (Object o : jsonArray) {
+            JSONObject placeJson = (JSONObject) o;
+            places.add(new Place(
+                    placeJson.get("PlaceId").toString(),
+                    placeJson.get("PlaceName").toString(),
+                    placeJson.get("CountryId").toString(),
+                    placeJson.get("RegionId").toString(),
+                    placeJson.get("CityId").toString(),
+                    placeJson.get("CountryName").toString()
+            ));
+        }
+        return places;
+    }*/
 }
