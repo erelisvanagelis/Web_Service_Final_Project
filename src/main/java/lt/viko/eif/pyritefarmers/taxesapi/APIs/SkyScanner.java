@@ -17,6 +17,14 @@ public class SkyScanner {
     public static void getBrowseQuotesResult(Options options) throws IOException, ParseException {
         OkHttpClient client = new OkHttpClient();
 
+        String url1 = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0" +
+                "/" + options.getMarket() +
+                "/" + options.getCurrency() +
+                "/en-US" +
+                "/" + options.getOriginPlace() +
+                "/" + options.getDestinationPlace() +
+                "/anytime?inboundpartialdate=anytime";
+
         Request request = new Request.Builder()
                 .url("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0" +
                         "/" + options.getMarket() +
@@ -29,7 +37,23 @@ public class SkyScanner {
                 .addHeader("x-rapidapi-key", "c0dd1b869fmsh6b647aa42d660f4p1c85b7jsn5d757cf79a06")
                 .addHeader("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
                 .build();
-
+        String url2 = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/UK/EUR/en-US/LT-sky/PT-sky/anytime?inboundpartialdate=anytime";
+        System.out.println(url1);
+        System.out.println(url2);
+        /*
+        Request request = new Request.Builder()
+                .url("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0
+                /UK
+                /EUR
+                /en-US
+                /LT-sky
+                /PT-sky
+                /anytime?inboundpartialdate=anytime")
+                .get()
+                .addHeader("x-rapidapi-key", "c0dd1b869fmsh6b647aa42d660f4p1c85b7jsn5d757cf79a06")
+                .addHeader("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+                .build();
+*/
         Response response = client.newCall(request).execute();
 
         String responseString = response.body().string();
@@ -41,6 +65,18 @@ public class SkyScanner {
 
         //JSONArray jsonarr_1 = (JSONArray) jsonObject.get("list");
         System.out.println(jsonObject);
+        System.out.println();
 
+        request = new Request.Builder()
+                .url("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/UK/EUR/en-US/LT-sky/PT-sky/anytime?inboundpartialdate=anytime")
+                        .get()
+                        .addHeader("x-rapidapi-key", "c0dd1b869fmsh6b647aa42d660f4p1c85b7jsn5d757cf79a06")
+                        .addHeader("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+                        .build();
+        response = client.newCall(request).execute();
+        responseString = response.body().string();
+
+        jsonObject = (JSONObject)parse.parse(responseString);
+        System.out.println(jsonObject);
     }
 }

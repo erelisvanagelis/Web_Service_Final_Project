@@ -48,9 +48,9 @@ public class Options {
     public Options() {
         this.id = 0;
         this.userId = 0;
-        this.market = "LT";
+        this.market = "UK";
         this.originPlace = "LT-sky";
-        this.destinationPlace = "PR-sky";
+        this.destinationPlace = "PT-sky";
         this.distance = 50;
         this.price = 500;
         this.currency = "EUR";
