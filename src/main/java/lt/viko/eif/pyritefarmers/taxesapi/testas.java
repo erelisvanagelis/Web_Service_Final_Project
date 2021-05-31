@@ -8,6 +8,6 @@ import java.io.IOException;
 
 public class testas {
     public static void main(String[] args) throws IOException, ParseException {
-        SkyScanner.getBrowseQuotesResult(new Options());
+        SkyScanner.getBrowseQuotesResult(new Options(true));
     }
 }

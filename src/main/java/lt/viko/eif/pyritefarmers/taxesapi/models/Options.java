@@ -45,7 +45,7 @@ public class Options {
         this.end = end;
     }
 
-    public Options() {
+    public Options(boolean grybas) {
         this.id = 0;
         this.userId = 0;
         this.market = "UK";
