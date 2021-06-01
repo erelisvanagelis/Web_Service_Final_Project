@@ -1,5 +1,6 @@
 package lt.viko.eif.pyritefarmers.taxesapi.models;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -8,17 +9,23 @@ public class QuoteSimplified {
     private boolean direct;
     private String origin;
     private String destination;
-    private Date departureDate;
+    private LocalDateTime departureDate;
+    private LocalDateTime quoteDateTime;
     private List<String> carriers;
 
-    public QuoteSimplified(
-            double minPrice, boolean direct, String origin, String destination, Date departureDate, List<String> carriers) {
+    public QuoteSimplified(double minPrice, boolean direct, String origin, String destination,
+                           LocalDateTime departureDate, LocalDateTime quoteDateTime, List<String> carriers) {
         this.minPrice = minPrice;
         this.direct = direct;
         this.origin = origin;
         this.destination = destination;
         this.departureDate = departureDate;
+        this.quoteDateTime = quoteDateTime;
         this.carriers = carriers;
+    }
+
+    public QuoteSimplified() {
+
     }
 
     public double getMinPrice() {
@@ -53,11 +60,19 @@ public class QuoteSimplified {
         this.destination = destination;
     }
 
-    public Date getDepartureDate() {
+    public LocalDateTime getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(Date departureDate) {
+    public LocalDateTime getQuoteDateTime() {
+        return quoteDateTime;
+    }
+
+    public void setQuoteDateTime(LocalDateTime quoteDateTime) {
+        this.quoteDateTime = quoteDateTime;
+    }
+
+    public void setDepartureDate(LocalDateTime departureDate) {
         this.departureDate = departureDate;
     }
 
@@ -77,6 +92,7 @@ public class QuoteSimplified {
                 ", origin='" + origin + '\'' +
                 ", destination='" + destination + '\'' +
                 ", departureDate=" + departureDate +
+                ", quoteDateTime=" + quoteDateTime +
                 ", carriers=" + carriers +
                 '}';
     }

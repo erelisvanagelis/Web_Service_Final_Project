@@ -3,16 +3,15 @@ package lt.viko.eif.pyritefarmers.taxesapi.APIs;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import lt.viko.eif.pyritefarmers.taxesapi.models.Carrier;
-import lt.viko.eif.pyritefarmers.taxesapi.models.Options;
-import lt.viko.eif.pyritefarmers.taxesapi.models.Place;
-import lt.viko.eif.pyritefarmers.taxesapi.models.PlaceQuote;
+import lt.viko.eif.pyritefarmers.taxesapi.models.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,24 +82,7 @@ public class SkyScanner {
         return places;
     }
 
-    public static List<Place> getQuotesSimplified(Options options) throws IOException, ParseException {
-        JSONObject jsonObject = getBrowseQuotesService(options);
-        JSONArray jsonArray = (JSONArray) jsonObject.get("Places");
 
-        List<Place> places = new ArrayList<>();
-        for (Object o : jsonArray) {
-            JSONObject placeJson = (JSONObject) o;
-            places.add(new Place(
-                    placeJson.get("PlaceId").toString(),
-                    placeJson.get("PlaceName").toString(),
-                    placeJson.get("CountryId").toString(),
-                    placeJson.get("RegionId").toString(),
-                    placeJson.get("CityId").toString(),
-                    placeJson.get("CountryName").toString()
-            ));
-        }
-        return places;
-    }
 
     public static List<PlaceQuote> getPlaceQuotes(JSONObject jsonObject) throws IOException, ParseException {
         JSONArray jsonArray = (JSONArray) jsonObject.get("Places");
@@ -140,11 +122,87 @@ public class SkyScanner {
         return carriers;
     }
 
-    public static void BrowseQuotesTransformer(Options options) throws IOException, ParseException {
-        JSONObject jsonObject = getBrowseQuotesService(options);
-        List<PlaceQuote> placeQuotes = getPlaceQuotes(jsonObject);
-        for (PlaceQuote place: placeQuotes) {
-            System.out.println(place);
+    public static List<Quote> getQuotes(JSONObject jsonObject) {
+        JSONArray jsonArray = (JSONArray) jsonObject.get("Quotes");
+
+        List<Quote> quotes = new ArrayList<>();
+        for (Object o : jsonArray) {
+            JSONObject quoteJson = (JSONObject) o;
+
+            JSONObject outboundLeg = (JSONObject) ((JSONObject) o).get("OutboundLeg");
+            JSONArray carriersJson = (JSONArray) outboundLeg.get("CarrierIds");
+            List<Integer> carriers = new ArrayList<>();
+            for (Object carrier : carriersJson) {
+                carriers.add(Integer.parseInt(carrier.toString()));
+                System.out.println(carrier.toString());
+            }
+
+            quotes.add(new Quote(
+                    Integer.parseInt(quoteJson.get("QuoteId").toString()),
+                    Double.parseDouble(quoteJson.get("MinPrice").toString()),
+                    Boolean.parseBoolean(quoteJson.get("Direct").toString()),
+                    Integer.parseInt(outboundLeg.get("OriginId").toString()),
+                    Integer.parseInt(outboundLeg.get("DestinationId").toString()),
+                    LocalDateTime.parse(outboundLeg.get("DepartureDate").toString()),
+                    LocalDateTime.parse(quoteJson.get("QuoteDateTime").toString()),
+                    carriers
+            ));
         }
+        return quotes;
     }
+
+    public static List<QuoteSimplified> getQuotesSimplified(Options options) throws IOException, ParseException {
+        JSONObject jsonObject = getBrowseQuotesService(options);
+        List<PlaceQuote> placeQuotes = SkyScanner.getPlaceQuotes(jsonObject);
+        List<Quote> quotes = SkyScanner.getQuotes(jsonObject);
+        List<Carrier> carriers = SkyScanner.getCarriers(jsonObject);
+
+        List<QuoteSimplified> quoteSimplifiedList = new ArrayList<>();
+        for(Quote quote : quotes){
+            QuoteSimplified quoteSimplified = new QuoteSimplified();
+            quoteSimplified.setMinPrice(quote.getMinPrice());
+            quoteSimplified.setDirect(quote.isDirect());
+            quoteSimplified.setDepartureDate(quote.getDepartureDate());
+            quoteSimplified.setQuoteDateTime(quote.getQuoteDateTime());
+
+            for (PlaceQuote place : placeQuotes){
+                if(place.getType().equals("Country")){
+                    continue;
+                }
+
+                if (place.getPlaceId() == quote.getDestinationId()){
+                    quoteSimplified.setDestination(
+                            place.getSkyscannerCode() +
+                                    " " + place.getIataCode() +
+                                    " " + place.getCityName() +
+                                    " " + place.getCountryName()
+                    );
+                    continue;
+                }
+
+                if (place.getPlaceId() == quote.getOriginId()){
+                    quoteSimplified.setOrigin(
+                                    " " + place.getIataCode() +
+                                    " " + place.getCityName() +
+                                    " " + place.getCountryName()
+                    );
+                }
+            }
+            List<String> carrierNames = new ArrayList<>();
+
+            for (Integer carrierId : quote.getCarrierIds()){
+                for (Carrier carrier : carriers){
+                    if(carrier.getCarrierId() == carrierId.intValue()){
+                        carrierNames.add(carrier.getName());
+                        break;
+                    }
+                }
+            }
+            quoteSimplified.setCarriers(carrierNames);
+            quoteSimplifiedList.add(quoteSimplified);
+        }
+
+        return quoteSimplifiedList;
+    }
+
 }
