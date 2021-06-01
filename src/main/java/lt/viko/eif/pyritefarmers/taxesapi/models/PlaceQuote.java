@@ -22,6 +22,10 @@ public class PlaceQuote {
         this.countryName = countryName;
     }
 
+    public PlaceQuote() {
+
+    }
+
     public String getName() {
         return name;
     }

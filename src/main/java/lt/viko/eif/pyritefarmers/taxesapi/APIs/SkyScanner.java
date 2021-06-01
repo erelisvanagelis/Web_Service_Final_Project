@@ -100,22 +100,60 @@ public class SkyScanner {
         }
         return places;
     }
-/*
-    public static List<PlaceQuote> getQuotesSimplified(JSONObject jsonObject) throws IOException, ParseException {
+
+    public static List<PlaceQuote> getPlaceQuotes(JSONObject jsonObject) throws IOException, ParseException {
         JSONArray jsonArray = (JSONArray) jsonObject.get("Places");
 
-        List<Place> places = new ArrayList<>();
+        List<PlaceQuote> places = new ArrayList<>();
         for (Object o : jsonArray) {
+            System.out.println("pasiekiu");
             JSONObject placeJson = (JSONObject) o;
-            places.add(new Place(
-                    placeJson.get("PlaceId").toString(),
-                    placeJson.get("PlaceName").toString(),
-                    placeJson.get("CountryId").toString(),
-                    placeJson.get("RegionId").toString(),
-                    placeJson.get("CityId").toString(),
-                    placeJson.get("CountryName").toString()
-            ));
+            PlaceQuote placeQuote = new PlaceQuote();
+            placeQuote.setName(placeJson.get("Name").toString());
+            placeQuote.setType(placeJson.get("Type").toString());
+            placeQuote.setPlaceId(Integer.parseInt(placeJson.get("PlaceId").toString()));
+            placeQuote.setSkyscannerCode(placeJson.get("SkyscannerCode").toString());
+
+            if (placeQuote.getType().equals("Station")){
+                placeQuote.setIataCode(placeJson.get("IataCode").toString());
+                placeQuote.setCityName(placeJson.get("CityName").toString());
+                placeQuote.setCityId(placeJson.get("CityId").toString());
+                placeQuote.setCountryName(placeJson.get("CountryName").toString());
+            }
+            places.add(placeQuote);
         }
         return places;
-    }*/
+    }
+
+    public static List<PlaceQuote> getCarriers(JSONObject jsonObject) throws IOException, ParseException {
+        JSONArray jsonArray = (JSONArray) jsonObject.get("Carriers");
+
+        List<PlaceQuote> places = new ArrayList<>();
+        for (Object o : jsonArray) {
+            System.out.println("pasiekiu");
+            JSONObject placeJson = (JSONObject) o;
+            PlaceQuote placeQuote = new PlaceQuote();
+            placeQuote.setName(placeJson.get("Name").toString());
+            placeQuote.setType(placeJson.get("Type").toString());
+            placeQuote.setPlaceId(Integer.parseInt(placeJson.get("PlaceId").toString()));
+            placeQuote.setSkyscannerCode(placeJson.get("SkyscannerCode").toString());
+
+            if (placeQuote.getType().equals("Station")){
+                placeQuote.setIataCode(placeJson.get("IataCode").toString());
+                placeQuote.setCityName(placeJson.get("CityName").toString());
+                placeQuote.setCityId(placeJson.get("CityId").toString());
+                placeQuote.setCountryName(placeJson.get("CountryName").toString());
+            }
+            places.add(placeQuote);
+        }
+        return places;
+    }
+
+    public static void BrowseQuotesTransformer(Options options) throws IOException, ParseException {
+        JSONObject jsonObject = getBrowseQuotesService(options);
+        List<PlaceQuote> placeQuotes = getPlaceQuotes(jsonObject);
+        for (PlaceQuote place: placeQuotes) {
+            System.out.println(place);
+        }
+    }
 }
