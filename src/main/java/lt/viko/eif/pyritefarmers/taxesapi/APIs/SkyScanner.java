@@ -3,6 +3,7 @@ package lt.viko.eif.pyritefarmers.taxesapi.APIs;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import lt.viko.eif.pyritefarmers.taxesapi.models.Carrier;
 import lt.viko.eif.pyritefarmers.taxesapi.models.Options;
 import lt.viko.eif.pyritefarmers.taxesapi.models.Place;
 import lt.viko.eif.pyritefarmers.taxesapi.models.PlaceQuote;
@@ -106,7 +107,6 @@ public class SkyScanner {
 
         List<PlaceQuote> places = new ArrayList<>();
         for (Object o : jsonArray) {
-            System.out.println("pasiekiu");
             JSONObject placeJson = (JSONObject) o;
             PlaceQuote placeQuote = new PlaceQuote();
             placeQuote.setName(placeJson.get("Name").toString());
@@ -125,28 +125,19 @@ public class SkyScanner {
         return places;
     }
 
-    public static List<PlaceQuote> getCarriers(JSONObject jsonObject) throws IOException, ParseException {
+    public static List<Carrier> getCarriers(JSONObject jsonObject) throws IOException, ParseException {
         JSONArray jsonArray = (JSONArray) jsonObject.get("Carriers");
 
-        List<PlaceQuote> places = new ArrayList<>();
+        List<Carrier> carriers = new ArrayList<>();
         for (Object o : jsonArray) {
-            System.out.println("pasiekiu");
-            JSONObject placeJson = (JSONObject) o;
-            PlaceQuote placeQuote = new PlaceQuote();
-            placeQuote.setName(placeJson.get("Name").toString());
-            placeQuote.setType(placeJson.get("Type").toString());
-            placeQuote.setPlaceId(Integer.parseInt(placeJson.get("PlaceId").toString()));
-            placeQuote.setSkyscannerCode(placeJson.get("SkyscannerCode").toString());
+            JSONObject carrierJson = (JSONObject) o;
 
-            if (placeQuote.getType().equals("Station")){
-                placeQuote.setIataCode(placeJson.get("IataCode").toString());
-                placeQuote.setCityName(placeJson.get("CityName").toString());
-                placeQuote.setCityId(placeJson.get("CityId").toString());
-                placeQuote.setCountryName(placeJson.get("CountryName").toString());
-            }
-            places.add(placeQuote);
+            carriers.add(new Carrier(
+                    Integer.parseInt(carrierJson.get("CarrierId").toString()),
+                    carrierJson.get("Name").toString()
+            ));
         }
-        return places;
+        return carriers;
     }
 
     public static void BrowseQuotesTransformer(Options options) throws IOException, ParseException {
