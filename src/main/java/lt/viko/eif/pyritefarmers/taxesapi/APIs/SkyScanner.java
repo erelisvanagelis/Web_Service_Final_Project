@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkyScanner {
+    private static String key = "c0dd1b869fmsh6b647aa42d660f4p1c85b7jsn5d757cf79a06";
     public static JSONObject getBrowseQuotesService(Options options) throws IOException, ParseException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -27,7 +28,7 @@ public class SkyScanner {
                         "/" + options.getDestinationPlace() +
                         "/anytime?inboundpartialdate=anytime")
                 .get()
-                .addHeader("x-rapidapi-key", "c0dd1b869fmsh6b647aa42d660f4p1c85b7jsn5d757cf79a06")
+                .addHeader("x-rapidapi-key", key)
                 .addHeader("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
                 .build();
 
@@ -50,7 +51,7 @@ public class SkyScanner {
                         "/?query=" + query
                         )
                 .get()
-                .addHeader("x-rapidapi-key", "c0dd1b869fmsh6b647aa42d660f4p1c85b7jsn5d757cf79a06")
+                .addHeader("x-rapidapi-key", key)
                 .addHeader("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
                 .build();
 
@@ -172,7 +173,6 @@ public class SkyScanner {
 
                 if (place.getPlaceId() == quote.getDestinationId()){
                     quoteSimplified.setDestination(
-                            place.getSkyscannerCode() +
                                     " " + place.getIataCode() +
                                     " " + place.getCityName() +
                                     " " + place.getCountryName()
@@ -203,6 +203,23 @@ public class SkyScanner {
         }
 
         return quoteSimplifiedList;
+    }
+
+    public static List<QuoteSimplified> getCorrespondingQuotes(Options options) throws IOException, ParseException {
+        List<QuoteSimplified> quoteSimplifiedList = getQuotesSimplified(options);
+        List<QuoteSimplified> correspondingQuotes = new ArrayList<>();
+        for (QuoteSimplified quote: quoteSimplifiedList) {
+            if(quote.getMinPrice() > options.getPrice()){
+                continue;
+            }
+
+            if (options.isDirect() && quote.isDirect() == false){
+                continue;
+            }
+
+            correspondingQuotes.add(quote);
+        }
+        return correspondingQuotes;
     }
 
 }

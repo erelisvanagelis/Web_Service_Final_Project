@@ -38,5 +38,6 @@ public class testas {
         for (QuoteSimplified quoteSimplified : quoteSimplifiedList){
             System.out.println(quoteSimplified);
         }
+
     }
 }
