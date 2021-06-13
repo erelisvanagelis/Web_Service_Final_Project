@@ -213,6 +213,10 @@ public class SkyScanner {
                 continue;
             }
 
+            if (options.isDirect() && quote.isDirect() == false){
+                continue;
+            }
+
             correspondingQuotes.add(quote);
         }
         return correspondingQuotes;
