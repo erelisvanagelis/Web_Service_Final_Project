@@ -36,7 +36,7 @@ public class UserController {
     @GetMapping("/user/login/{name}/{password}")
     ResponseEntity<RepresentationModel<?>> login(@PathVariable String name, @PathVariable String password) throws Exception {
         repository.Login(name,password);
-         System.out.println(repository.GetLoggedInUser());
+         System.out.println(repository.GetLoggedInUser()+"Logged");
         RepresentationModel<?> model = CollectionModel.of(repository.GetLoggedInUser());
         final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
         model.add(Link.of(uriString, "self-User-LoggedIn"));
