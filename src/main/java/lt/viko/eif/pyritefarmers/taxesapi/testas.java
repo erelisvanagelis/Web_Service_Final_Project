@@ -15,7 +15,7 @@ public class testas {
 
         List<Place> places = SkyScanner.getPlaces("LT", "Lithuania");
         for (Place place : places){
-            System.out.println(place);
+            System.out.println(place+"Place");
         }
 
         List<PlaceQuote> placeQuotes = SkyScanner.getPlaceQuotes(jsonObject);
