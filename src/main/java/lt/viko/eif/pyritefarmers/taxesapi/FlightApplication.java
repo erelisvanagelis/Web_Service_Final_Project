@@ -18,10 +18,10 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableSwagger2
-public class TaxesapiApplication {
+public class FlightApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TaxesapiApplication.class, args);
+		SpringApplication.run(FlightApplication.class, args);
 	}
 	@Primary
 	@Bean
