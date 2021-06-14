@@ -12,7 +12,7 @@
 	<artifactId>taxesapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>taxesapi</name>
-	<description>Api that calculates taxes based on area and converts it</description>
+	<description>Api finds commercial flight data</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
