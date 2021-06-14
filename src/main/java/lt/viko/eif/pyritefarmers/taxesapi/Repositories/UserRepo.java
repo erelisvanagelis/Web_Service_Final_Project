@@ -1,10 +1,14 @@
 package lt.viko.eif.pyritefarmers.taxesapi.Repositories;
 
+import lt.viko.eif.pyritefarmers.taxesapi.RestController.Restcontroller;
+import lt.viko.eif.pyritefarmers.taxesapi.models.Options;
 import lt.viko.eif.pyritefarmers.taxesapi.models.User;
 
 import java.lang.annotation.Annotation;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UserRepo {
@@ -12,11 +16,12 @@ public class UserRepo {
     private static User loggedInUser;
     private static User registeredUser;
     private Connection Conn;
-    public UserRepo(){
+    public UserRepo() throws SQLException {
         if (userList == null) {
             userList = new ArrayList<>();
         }
         try {
+            userList.clear();
             Conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/finalproject", "root", "root");
             System.out.println("All good connected");
         } catch (SQLException e) {
@@ -40,6 +45,32 @@ public class UserRepo {
         } catch (SQLException exc) {
             exc.printStackTrace();
         }
+        for(User u : userList){
+            Statement stmt;
+            ResultSet rs;
+            stmt = Conn.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM finalproject.options where userid= '"+ u.getId() +"'");
+            while (rs.next()) {
+                int id=(rs.getInt("id"));
+                int userid= (rs.getInt("userid"));
+                String market= String.valueOf(rs.getString("market"));
+                String originplace= rs.getString("originplace");
+                String destination= rs.getString("destinationplace");
+                int distance= rs.getInt("distance");
+                int price= rs.getInt("price");
+                String currency= rs.getString("currency");
+                boolean direct = rs.getBoolean("direct");
+                LocalDate datefrom= LocalDate.parse(String.valueOf(rs.getString("datefrom")));
+                LocalDate dateto= LocalDate.parse(rs.getString("dateto"));
+
+
+
+                Options options2= new Options(id,userid,market,originplace,destination,distance,price,currency,direct,datefrom,dateto);
+                u.setOptionsList(Collections.singletonList(options2));
+
+            }
+        }
+
      //   userList.add(new User("Adam1","Traore1","XXTentac"));
        // userList.add(new User("Adam2","Traore2","TankiOnline"));
 
@@ -97,7 +128,6 @@ public class UserRepo {
         } }
 
         public List<User> GetUsers(){
-            new UserRepo();
         return userList;
 
     }

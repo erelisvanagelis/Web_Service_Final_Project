@@ -37,7 +37,7 @@ public class Restcontroller {
      * @throws IOException
      * @throws ParseException
      */
-    public Restcontroller() throws IOException, ParseException {
+    public Restcontroller() throws IOException, ParseException, SQLException {
         try {
             Conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/finalproject", "root", "root");
             System.out.println("All good connected");
@@ -55,29 +55,13 @@ public class Restcontroller {
      * @throws Exception
      */
     @GetMapping("/routes/starting/{market}/{query}")
-    ResponseEntity<CollectionModel<Place>> startingplace(@PathVariable String market, @PathVariable String query) throws Exception {
+    ResponseEntity<CollectionModel<Place>> place(@PathVariable String market, @PathVariable String query) throws Exception {
         CollectionModel<Place> model = CollectionModel.of(SkyScanner.getPlaces(market,query));
        // List<Place> places=SkyScanner.getPlaces(market,query);
         final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
         model.add(Link.of(uriString, "self-starting-routes"));
         return ResponseEntity.ok(model);
     }
-    /**
-     * Gets all the places from the specified market
-     * @param market example - "LT"
-     * @param query example - "Lithuania"
-     * @return ResponseEntity that is comprised of Place collection model
-     * @throws Exception
-     */
-    @GetMapping("/routes/destination/{market}/{query}")
-    ResponseEntity<CollectionModel<Place>> destiantionplace(@PathVariable String market, @PathVariable String query) throws Exception {
-        CollectionModel<Place> model = CollectionModel.of(SkyScanner.getPlaces(market,query));
-     //   List<Place> places=SkyScanner.getPlaces(market,query);
-        final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-        model.add(Link.of(uriString, "self-destination-routes"));
-        return ResponseEntity.ok(model);
-    }
-
     /**
      * what is de purpose of dis
      * Gets an example of
@@ -101,7 +85,7 @@ public class Restcontroller {
         return ResponseEntity.ok(model);
     }
     //cia tipo toks ala gautusi jaigu kaupti duomenys
-    Options options = new Options(0,0,"UK","LT-sky","SE-sky",50,500,"EUR",false,java.time.LocalDate.now(),java.time.LocalDate.now().plusDays(7));
+    Options options = new Options(0,0,"UK","LT-sky","PL-sky",50,500,"EUR",false,java.time.LocalDate.now(),java.time.LocalDate.now().plusDays(7));
 
     @GetMapping("/routes/simpleqoute")
     ResponseEntity<CollectionModel<QuoteSimplified>> simplifiedquotes() throws Exception {
@@ -114,6 +98,7 @@ public class Restcontroller {
     @GetMapping("/routes/simplequote/check")
     ResponseEntity<RepresentationModel<?>> simplifiedquotescheck() throws Exception {
         Options options2 = null;
+        RepresentationModel<?> model = null;
         try {
             new Restcontroller();
             Statement stmt;
@@ -133,15 +118,13 @@ public class Restcontroller {
                 LocalDate datefrom= LocalDate.parse(String.valueOf(rs.getString("datefrom")));
                 LocalDate dateto= LocalDate.parse(rs.getString("dateto"));
 
-
-
                 options2= new Options(id,userid,market,originplace,destination,distance,price,currency,direct,datefrom,dateto);
-
+                model = CollectionModel.of(SkyScanner.getQuotesSimplified(options2));
             }
         } catch (SQLException exc) {
             exc.printStackTrace();
         }
-        RepresentationModel<?> model = CollectionModel.of(SkyScanner.getQuotesSimplified(options2));
+     
         //   List<Place> places=SkyScanner.getPlaces(market,query);
         final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
         model.add(Link.of(uriString, "self-route-simplified_quote"));
@@ -165,7 +148,7 @@ public class Restcontroller {
         preparedStmt.setString(9, String.valueOf(options.getStart()));
         preparedStmt.setString(10, String.valueOf(options.getEnd()));
         preparedStmt.execute();
-        List <Options> optionsList= Collections.singletonList(options);
+        List <Options> optionsList=Collections.singletonList(options);
         repository.GetLoggedInUser().setOptionsList(optionsList);
         RepresentationModel<?> model = CollectionModel.of(repository.GetLoggedInUser());
         //   List<Place> places=SkyScanner.getPlaces(market,query);
