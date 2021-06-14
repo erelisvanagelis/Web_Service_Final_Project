@@ -1,6 +1,6 @@
 # Web_Service_Final_Project
-SocialNetworkAPI
-SocialNetworkAPI is an API designed for social networking. It allows to register users, add friends, posts, check the weather in the city where the user lives, see posts made by your friends, detect the language it's users are using and more!
+FlightPlannerAPI
+FlightPlannerAPI is an API designed to help customers search cheapest flights around the world.
 
 #Getting Started
 Software used for the project.
