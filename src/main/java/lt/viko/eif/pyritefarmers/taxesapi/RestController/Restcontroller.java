@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * RestController that controls services used for Options
+ */
 @RestController
 public class Restcontroller {
     private final UserRepo repository = new UserRepo();
@@ -29,6 +32,11 @@ public class Restcontroller {
     JSONObject jsonObject = SkyScanner.getBrowseQuotesService(new Options(true));
 
 
+    /**
+     * Constructor that connects controller to db
+     * @throws IOException
+     * @throws ParseException
+     */
     public Restcontroller() throws IOException, ParseException {
         try {
             Conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/finalproject", "root", "root");
@@ -39,6 +47,13 @@ public class Restcontroller {
         }
     }
 
+    /**
+     * Gets all the places from the specified market
+     * @param market example - "LT"
+     * @param query example - "Lithuania"
+     * @return ResponseEntity that is comprised of Place collection model
+     * @throws Exception
+     */
     @GetMapping("/routes/starting/{market}/{query}")
     ResponseEntity<CollectionModel<Place>> startingplace(@PathVariable String market, @PathVariable String query) throws Exception {
         CollectionModel<Place> model = CollectionModel.of(SkyScanner.getPlaces(market,query));
@@ -47,6 +62,13 @@ public class Restcontroller {
         model.add(Link.of(uriString, "self-starting-routes"));
         return ResponseEntity.ok(model);
     }
+    /**
+     * Gets all the places from the specified market
+     * @param market example - "LT"
+     * @param query example - "Lithuania"
+     * @return ResponseEntity that is comprised of Place collection model
+     * @throws Exception
+     */
     @GetMapping("/routes/destination/{market}/{query}")
     ResponseEntity<CollectionModel<Place>> destiantionplace(@PathVariable String market, @PathVariable String query) throws Exception {
         CollectionModel<Place> model = CollectionModel.of(SkyScanner.getPlaces(market,query));
@@ -56,7 +78,13 @@ public class Restcontroller {
         return ResponseEntity.ok(model);
     }
 
-    @GetMapping("/routes/placeQoute")
+    /**
+     * what is de purpose of dis
+     * Gets an example of
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/routes/placeQuote")
     ResponseEntity<CollectionModel<PlaceQuote>> placeQuotes() throws Exception {
         CollectionModel<PlaceQuote> model = CollectionModel.of(SkyScanner.getPlaceQuotes(jsonObject));
         //   List<Place> places=SkyScanner.getPlaces(market,query);
@@ -64,7 +92,7 @@ public class Restcontroller {
         model.add(Link.of(uriString, "self-starting-routes"));
         return ResponseEntity.ok(model);
     }
-    @GetMapping("/routes/qoute")
+    @GetMapping("/routes/quote")
     ResponseEntity<CollectionModel<Quote>> quotes() throws Exception {
         CollectionModel<Quote> model = CollectionModel.of(SkyScanner.getQuotes(jsonObject));
         //   List<Place> places=SkyScanner.getPlaces(market,query);
@@ -83,7 +111,7 @@ public class Restcontroller {
         model.add(Link.of(uriString, "self-route-simplified_quote"));
         return ResponseEntity.ok(model);
     }
-    @GetMapping("/routes/simpleqoute/check")
+    @GetMapping("/routes/simplequote/check")
     ResponseEntity<RepresentationModel<?>> simplifiedquotescheck() throws Exception {
         Options options2 = null;
         try {
@@ -120,7 +148,7 @@ public class Restcontroller {
         return ResponseEntity.ok(model);
     }
 
-    @GetMapping("/routes/simpleqoute/add")
+    @GetMapping("/routes/simplequote/add")
     ResponseEntity<RepresentationModel<?>> simplifiedquotesadd() throws Exception {
         new Restcontroller();
         Statement statement=Conn.createStatement();

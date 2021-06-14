@@ -15,8 +15,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Interacts with SkyScanner API and parses the data received
+ */
 public class SkyScanner {
     private static String key = "c0dd1b869fmsh6b647aa42d660f4p1c85b7jsn5d757cf79a06";
+
+    /**
+     * Calls browsequotes service, with parameters provided in the options object
+     * @param options by which specified quote is returned
+     * @return JSONObject of the response body
+     * @throws IOException
+     * @throws ParseException
+     */
     public static JSONObject getBrowseQuotesService(Options options) throws IOException, ParseException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -41,6 +52,14 @@ public class SkyScanner {
         return jsonObject;
     }
 
+    /**
+     * Calls autosuggest service, which returns places based on market and query
+     * @param market example - "LT"
+     * @param query example - "Lithuania"
+     * @return JSONObject of the response body
+     * @throws IOException
+     * @throws ParseException
+     */
     public static JSONObject getListPlacesService(String market, String query) throws IOException, ParseException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -64,6 +83,14 @@ public class SkyScanner {
         return jsonObject;
     }
 
+    /**
+     * Calls autosuggest service, which returns places based on market and query and parses it to Place list
+     * @param market example - "LT"
+     * @param query example - "Lithuania"
+     * @return List of places that fit the search results
+     * @throws IOException
+     * @throws ParseException
+     */
     public static List<Place> getPlaces(String market, String query) throws IOException, ParseException {
         JSONObject jsonObject = getListPlacesService(market, query);
         JSONArray jsonArray = (JSONArray) jsonObject.get("Places");
@@ -83,8 +110,13 @@ public class SkyScanner {
         return places;
     }
 
-
-
+    /**
+     * Parses JSONObject data that is returned from getBrowseQuotesService to PlaceQuote objects
+     * @param jsonObject data that is returned from getBrowseQuotesService
+     * @return a List of PlaceQuotes
+     * @throws IOException
+     * @throws ParseException
+     */
     public static List<PlaceQuote> getPlaceQuotes(JSONObject jsonObject) throws IOException, ParseException {
         JSONArray jsonArray = (JSONArray) jsonObject.get("Places");
 
@@ -108,6 +140,13 @@ public class SkyScanner {
         return places;
     }
 
+    /**
+     * Parses JSONObject data that is returned from getBrowseQuotesService to Carrier objects
+     * @param jsonObject data that is returned from getBrowseQuotesService
+     * @return a List of PlaceQuotes
+     * @throws IOException
+     * @throws ParseException
+     */
     public static List<Carrier> getCarriers(JSONObject jsonObject) throws IOException, ParseException {
         JSONArray jsonArray = (JSONArray) jsonObject.get("Carriers");
 
@@ -123,6 +162,13 @@ public class SkyScanner {
         return carriers;
     }
 
+    /**
+     * Parses JSONObject data that is returned from getBrowseQuotesService to Quote objects
+     * @param jsonObject data that is returned from getBrowseQuotesService
+     * @return a List of PlaceQuotes
+     * @throws IOException
+     * @throws ParseException
+     */
     public static List<Quote> getQuotes(JSONObject jsonObject) {
         JSONArray jsonArray = (JSONArray) jsonObject.get("Quotes");
 
@@ -152,6 +198,14 @@ public class SkyScanner {
         return quotes;
     }
 
+    /**
+     * Calls browsequotes service, with parameters provided in the options object, then parses the data using:
+     * getPlaceQuotes, getQuotes and getCarriers methods and combines the data into a list of QuoteSimplified objects
+     * @param options by which specified quote is returned
+     * @return a List of QuoteSimplified objects
+     * @throws IOException
+     * @throws ParseException
+     */
     public static List<QuoteSimplified> getQuotesSimplified(Options options) throws IOException, ParseException {
         JSONObject jsonObject = getBrowseQuotesService(options);
         List<PlaceQuote> placeQuotes = SkyScanner.getPlaceQuotes(jsonObject);
@@ -205,6 +259,13 @@ public class SkyScanner {
         return quoteSimplifiedList;
     }
 
+    /**
+     * Gets quotes that that correspond to the requirements in the Options object
+     * @param options an object with requirements for the quotes
+     * @return a List of Quote objects
+     * @throws IOException
+     * @throws ParseException
+     */
     public static List<QuoteSimplified> getCorrespondingQuotes(Options options) throws IOException, ParseException {
         List<QuoteSimplified> quoteSimplifiedList = getQuotesSimplified(options);
         List<QuoteSimplified> correspondingQuotes = new ArrayList<>();
@@ -213,7 +274,7 @@ public class SkyScanner {
                 continue;
             }
 
-            if (options.isDirect() && quote.isDirect() == false){
+            if (options.isDirect() && !quote.isDirect()){
                 continue;
             }
 

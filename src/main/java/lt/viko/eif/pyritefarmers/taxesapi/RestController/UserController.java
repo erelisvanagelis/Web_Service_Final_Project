@@ -18,10 +18,21 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * RestController that controls services used for Users
+ */
 @RestController
 public class UserController {
     private final UserRepo repository= new UserRepo();
 
+    /**
+     * Registers user to the database
+     * @param name String name of the user account
+     * @param password String password of the account
+     * @param Email String email of the account
+     * @return Upon success returns code 200 ok
+     * @throws Exception
+     */
     @GetMapping("/user/register/{name}/{password}/{Email}")
     ResponseEntity<RepresentationModel<?>> register(@PathVariable String name, @PathVariable String password, @PathVariable String Email) throws Exception {
         repository.Register(name,password,Email);
@@ -33,6 +44,14 @@ public class UserController {
 
         return ResponseEntity.ok(model);
     }
+
+    /**
+     * Login user to the system or just returns the user by its name and password from the db
+     * @param name String account name
+     * @param password String account password
+     * @return User object as Response entity
+     * @throws Exception
+     */
     @GetMapping("/user/login/{name}/{password}")
     ResponseEntity<RepresentationModel<?>> login(@PathVariable String name, @PathVariable String password) throws Exception {
         repository.Login(name,password);
@@ -43,6 +62,12 @@ public class UserController {
         // model.add(linkTo(methodOn(UserController.class).ShowUserInfo()).withRel("logged-user"));
         return ResponseEntity.ok(model);
     }
+
+    /**
+     * Returns all users
+     * @return ResponseEntity with a collection of users
+     * @throws Exception
+     */
     @GetMapping("/users")
     ResponseEntity<CollectionModel<User>> allusers() throws Exception {
         CollectionModel<User> model = CollectionModel.of(repository.GetUsers());
@@ -50,6 +75,13 @@ public class UserController {
         model.add(Link.of(uriString, "self-users"));
         return ResponseEntity.ok(model);
     }
+
+    /**
+     * Deletes an user from the db by its account name and password
+     * @param name String account name
+     * @param password String account password
+     * @return
+     */
     @GetMapping("/user/delete/{name}/{password}")
     public ResponseEntity<CollectionModel<List<User>>> delete(@PathVariable String name, @PathVariable String password){
         for (User u : repository.GetUsers()) {
