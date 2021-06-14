@@ -82,7 +82,7 @@ public class Restcontroller {
     }
 
     //cia tipo toks ala gautusi jaigu kaupti duomenys
-    Options options = new Options(0,0,"UK","LT-sky","PL-sky",50,500,"EUR",false,java.time.LocalDate.now(),java.time.LocalDate.now().plusDays(7));
+    Options options = new Options(0,0,"UK","LT-sky","LOND-sky",50,500,"EUR",false,java.time.LocalDate.now(),java.time.LocalDate.now().plusDays(7));
 
     @GetMapping("/routes/simpleqoute")
     ResponseEntity<CollectionModel<QuoteSimplified>> simplifiedquotes() throws Exception {

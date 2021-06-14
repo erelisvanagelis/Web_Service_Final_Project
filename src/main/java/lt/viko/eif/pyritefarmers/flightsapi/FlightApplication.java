@@ -33,7 +33,7 @@ public class FlightApplication {
 	@Bean
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("lt.viko.eif.pyritefarmers.taxesapi")).build();
+				.apis(RequestHandlerSelectors.basePackage("lt.viko.eif.pyritefarmers.flightsapi")).build();
 	}
 
 }
