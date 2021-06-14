@@ -260,7 +260,7 @@ public class SkyScanner {
     }
 
     /**
-     * Gets quotes that that correspond to the requirements in the Options object
+     * Gets quotes that correspond to the requirements in the Options object
      * @param options an object with requirements for the quotes
      * @return a List of Quote objects
      * @throws IOException
