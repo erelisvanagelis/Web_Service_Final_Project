@@ -52,7 +52,7 @@ public class Restcontroller {
      * @return ResponseEntity that is comprised of Place collection model
      * @throws Exception
      */
-    @GetMapping("/routes/starting/{market}/{query}")
+    @GetMapping("/routes/place/{market}/{query}")
     ResponseEntity<CollectionModel<Place>> place(@PathVariable String market, @PathVariable String query) throws Exception {
         CollectionModel<Place> model = CollectionModel.of(SkyScanner.getPlaces(market,query));
        // List<Place> places=SkyScanner.getPlaces(market,query);
@@ -82,6 +82,7 @@ public class Restcontroller {
         model.add(Link.of(uriString, "self-route-qoute"));
         return ResponseEntity.ok(model);
     }
+
     //cia tipo toks ala gautusi jaigu kaupti duomenys
     Options options = new Options(0,0,"UK","LT-sky","PL-sky",50,500,"EUR",false,java.time.LocalDate.now(),java.time.LocalDate.now().plusDays(7));
 
@@ -152,15 +153,6 @@ public class Restcontroller {
         //   List<Place> places=SkyScanner.getPlaces(market,query);
         final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
         model.add(Link.of(uriString, "self-route-simplified_quote-add"));
-        return ResponseEntity.ok(model);
-    }
-
-    @GetMapping("/routes/simplequotes")
-    public ResponseEntity<CollectionModel<QuoteSimplified>> getSimplifiedQuotes(@RequestBody Options options) throws IOException, ParseException {
-        CollectionModel<QuoteSimplified> model = CollectionModel.of(SkyScanner.getQuotesSimplified(options));
-        //   List<Place> places=SkyScanner.getPlaces(market,query);
-        final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-        model.add(Link.of(uriString, "self-route-simplified_quote"));
         return ResponseEntity.ok(model);
     }
 
