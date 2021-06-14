@@ -24,6 +24,6 @@ Maven - Dependency Management
 
 #Authors
 Dainius Dzikevičius - Developer - Raevon
-Liudas Staugaitis - Quality assurance specialist - balbazauras
+Liudas Staugaitis - Database engineer - balbazauras
 Ignas Norkus - Quality assurance specialist - IgnasNorkus
 Antanas Tamašauskas - Developer - erelisvanagelis
