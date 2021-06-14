@@ -1,4 +1,4 @@
-package lt.viko.eif.pyritefarmers.taxesapi.models;
+package lt.viko.eif.pyritefarmers.flightsapi.models;
 
 public class Place {
     private String placeId;

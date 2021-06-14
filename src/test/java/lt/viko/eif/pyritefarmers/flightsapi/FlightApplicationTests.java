@@ -1,10 +1,10 @@
-package lt.viko.eif.pyritefarmers.taxesapi;
+package lt.viko.eif.pyritefarmers.flightsapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TaxesapiApplicationTests {
+class FlightApplicationTests {
 
 	@Test
 	void contextLoads() {

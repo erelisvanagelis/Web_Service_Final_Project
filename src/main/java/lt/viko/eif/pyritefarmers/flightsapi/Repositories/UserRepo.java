@@ -1,10 +1,8 @@
-package lt.viko.eif.pyritefarmers.taxesapi.Repositories;
+package lt.viko.eif.pyritefarmers.flightsapi.Repositories;
 
-import lt.viko.eif.pyritefarmers.taxesapi.RestController.Restcontroller;
-import lt.viko.eif.pyritefarmers.taxesapi.models.Options;
-import lt.viko.eif.pyritefarmers.taxesapi.models.User;
+import lt.viko.eif.pyritefarmers.flightsapi.models.Options;
+import lt.viko.eif.pyritefarmers.flightsapi.models.User;
 
-import java.lang.annotation.Annotation;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
