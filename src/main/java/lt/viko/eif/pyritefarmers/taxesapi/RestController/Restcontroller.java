@@ -10,9 +10,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
@@ -157,5 +155,13 @@ public class Restcontroller {
         return ResponseEntity.ok(model);
     }
 
+    @GetMapping("/routes/simplequotes")
+    public ResponseEntity<CollectionModel<QuoteSimplified>> getSimplifiedQuotes(@RequestBody Options options) throws IOException, ParseException {
+        CollectionModel<QuoteSimplified> model = CollectionModel.of(SkyScanner.getQuotesSimplified(options));
+        //   List<Place> places=SkyScanner.getPlaces(market,query);
+        final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+        model.add(Link.of(uriString, "self-route-simplified_quote"));
+        return ResponseEntity.ok(model);
+    }
 
 }
