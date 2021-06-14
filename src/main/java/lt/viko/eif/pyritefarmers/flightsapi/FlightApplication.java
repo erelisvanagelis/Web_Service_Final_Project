@@ -1,4 +1,4 @@
-package lt.viko.eif.pyritefarmers.taxesapi;
+package lt.viko.eif.pyritefarmers.flightsapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

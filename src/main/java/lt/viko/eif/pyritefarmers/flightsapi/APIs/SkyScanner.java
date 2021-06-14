@@ -1,16 +1,15 @@
-package lt.viko.eif.pyritefarmers.taxesapi.APIs;
+package lt.viko.eif.pyritefarmers.flightsapi.APIs;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import lt.viko.eif.pyritefarmers.taxesapi.models.*;
+import lt.viko.eif.pyritefarmers.flightsapi.models.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

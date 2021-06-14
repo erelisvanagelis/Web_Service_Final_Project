@@ -1,7 +1,6 @@
-package lt.viko.eif.pyritefarmers.taxesapi.models;
+package lt.viko.eif.pyritefarmers.flightsapi.models;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Options {
     private int id;

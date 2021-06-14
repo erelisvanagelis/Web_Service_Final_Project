@@ -1,12 +1,11 @@
-package lt.viko.eif.pyritefarmers.taxesapi.RestController;
+package lt.viko.eif.pyritefarmers.flightsapi.RestController;
 
-import lt.viko.eif.pyritefarmers.taxesapi.Repositories.UserRepo;
-import lt.viko.eif.pyritefarmers.taxesapi.models.User;
+import lt.viko.eif.pyritefarmers.flightsapi.Repositories.UserRepo;
+import lt.viko.eif.pyritefarmers.flightsapi.models.User;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * RestController that controls services used for Users

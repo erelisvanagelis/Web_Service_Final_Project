@@ -1,7 +1,6 @@
-package lt.viko.eif.pyritefarmers.taxesapi.models;
+package lt.viko.eif.pyritefarmers.flightsapi.models;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class Quote {

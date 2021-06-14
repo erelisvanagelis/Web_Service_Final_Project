@@ -1,9 +1,8 @@
-package lt.viko.eif.pyritefarmers.taxesapi.RestController;
+package lt.viko.eif.pyritefarmers.flightsapi.RestController;
 
-import lt.viko.eif.pyritefarmers.taxesapi.APIs.SkyScanner;
-import lt.viko.eif.pyritefarmers.taxesapi.Repositories.UserRepo;
-import lt.viko.eif.pyritefarmers.taxesapi.models.*;
-import org.apache.tomcat.jni.Local;
+import lt.viko.eif.pyritefarmers.flightsapi.APIs.SkyScanner;
+import lt.viko.eif.pyritefarmers.flightsapi.Repositories.UserRepo;
+import lt.viko.eif.pyritefarmers.flightsapi.models.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.hateoas.CollectionModel;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

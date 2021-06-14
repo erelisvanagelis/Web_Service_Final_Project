@@ -1,6 +1,5 @@
-package lt.viko.eif.pyritefarmers.taxesapi.models;
+package lt.viko.eif.pyritefarmers.flightsapi.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class User {

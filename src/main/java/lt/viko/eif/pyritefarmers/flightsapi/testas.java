@@ -1,7 +1,7 @@
-package lt.viko.eif.pyritefarmers.taxesapi;
+package lt.viko.eif.pyritefarmers.flightsapi;
 
-import lt.viko.eif.pyritefarmers.taxesapi.APIs.SkyScanner;
-import lt.viko.eif.pyritefarmers.taxesapi.models.*;
+import lt.viko.eif.pyritefarmers.flightsapi.APIs.SkyScanner;
+import lt.viko.eif.pyritefarmers.flightsapi.models.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
