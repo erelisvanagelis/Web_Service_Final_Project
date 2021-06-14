@@ -23,10 +23,10 @@ public class UserRepo {
         try {
             userList.clear();
             Conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/finalproject", "root", "root");
-            System.out.println("All good connected");
+            System.out.println("Success! All good connected");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Something went wrong.");
+            System.out.println("Errpr! Something went wrong.");
         }
         try {
             Statement stmt;
