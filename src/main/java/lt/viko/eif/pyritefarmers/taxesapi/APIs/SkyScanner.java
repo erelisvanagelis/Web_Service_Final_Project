@@ -56,7 +56,7 @@ public class SkyScanner {
      * Calls autosuggest service, which returns places based on market and query
      * @param market example - "LT"
      * @param query example - "Lithuania"
-     * @return JSONObject of the response body
+     * @return JSONObject of the response body.
      * @throws IOException
      * @throws ParseException
      */

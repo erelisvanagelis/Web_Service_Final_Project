@@ -43,7 +43,7 @@ public class Restcontroller {
             System.out.println("All good connected");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Something went wrong.");
+            System.out.println("Something went wrong!");
         }
     }
 
