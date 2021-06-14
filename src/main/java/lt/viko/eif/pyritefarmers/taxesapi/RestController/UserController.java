@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,6 +25,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class UserController {
     private final UserRepo repository= new UserRepo();
+
+    public UserController() throws SQLException {
+    }
 
     /**
      * Registers user to the database

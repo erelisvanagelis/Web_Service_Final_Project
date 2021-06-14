@@ -3,6 +3,7 @@ package lt.viko.eif.pyritefarmers.taxesapi.RestController;
 import lt.viko.eif.pyritefarmers.taxesapi.APIs.SkyScanner;
 import lt.viko.eif.pyritefarmers.taxesapi.Repositories.UserRepo;
 import lt.viko.eif.pyritefarmers.taxesapi.models.*;
+import org.apache.tomcat.jni.Local;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.hateoas.CollectionModel;
@@ -11,29 +12,32 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * RestController that controls services used for Options
  */
-@org.springframework.web.bind.annotation.RestController
-public class RestController {
+@RestController
+public class Restcontroller {
     private final UserRepo repository = new UserRepo();
     private Connection Conn;
     JSONObject jsonObject = SkyScanner.getBrowseQuotesService(new Options(true));
+
 
     /**
      * Constructor that connects controller to db
      * @throws IOException
      * @throws ParseException
      */
-    public RestController() throws IOException, ParseException {
+    public Restcontroller() throws IOException, ParseException, SQLException {
         try {
             Conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/finalproject", "root", "root");
             System.out.println("All good connected");
@@ -51,7 +55,7 @@ public class RestController {
      * @throws Exception
      */
     @GetMapping("/routes/starting/{market}/{query}")
-    ResponseEntity<CollectionModel<Place>> startingplace(@PathVariable String market, @PathVariable String query) throws Exception {
+    ResponseEntity<CollectionModel<Place>> place(@PathVariable String market, @PathVariable String query) throws Exception {
         CollectionModel<Place> model = CollectionModel.of(SkyScanner.getPlaces(market,query));
        // List<Place> places=SkyScanner.getPlaces(market,query);
         final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
@@ -59,24 +63,9 @@ public class RestController {
         return ResponseEntity.ok(model);
     }
     /**
-     * Gets all the places from the specified market
-     * @param market example - "LT"
-     * @param query example - "Lithuania"
-     * @return ResponseEntity that is comprised of Place collection model
-     * @throws Exception
-     */
-    @GetMapping("/routes/destination/{market}/{query}")
-    ResponseEntity<CollectionModel<Place>> destiantionplace(@PathVariable String market, @PathVariable String query) throws Exception {
-        CollectionModel<Place> model = CollectionModel.of(SkyScanner.getPlaces(market,query));
-     //   List<Place> places=SkyScanner.getPlaces(market,query);
-        final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-        model.add(Link.of(uriString, "self-destination-routes"));
-        return ResponseEntity.ok(model);
-    }
-
-    /**
-     * Gets places based on options
-     * @return ResponseEntity with CollectionModel of PlaceQuote
+     * what is de purpose of dis
+     * Gets an example of
+     * @return
      * @throws Exception
      */
     @GetMapping("/routes/placeQuote")
@@ -87,12 +76,6 @@ public class RestController {
         model.add(Link.of(uriString, "self-starting-routes"));
         return ResponseEntity.ok(model);
     }
-
-    /**
-     * Gets quotes based on options
-     * @return ResponseEntity with CollectionModel of PlaceQuote
-     * @throws Exception
-     */
     @GetMapping("/routes/quote")
     ResponseEntity<CollectionModel<Quote>> quotes() throws Exception {
         CollectionModel<Quote> model = CollectionModel.of(SkyScanner.getQuotes(jsonObject));
@@ -102,14 +85,9 @@ public class RestController {
         return ResponseEntity.ok(model);
     }
     //cia tipo toks ala gautusi jaigu kaupti duomenys
-    Options options = new Options(0,0,"UK","LT-sky","SE-sky",50,500,"EUR",false,java.time.LocalDate.now(),java.time.LocalDate.now().plusDays(7));
+    Options options = new Options(0,0,"UK","LT-sky","PL-sky",50,500,"EUR",false,java.time.LocalDate.now(),java.time.LocalDate.now().plusDays(7));
 
-    /**
-     * Gets an simpleQuotes based on options
-     * @return ResponseEntity with CollectionModel of SimplifiedQuote
-     * @throws Exception
-     */
-    @GetMapping("/routes/simplequote")
+    @GetMapping("/routes/simpleqoute")
     ResponseEntity<CollectionModel<QuoteSimplified>> simplifiedquotes() throws Exception {
         CollectionModel<QuoteSimplified> model = CollectionModel.of(SkyScanner.getQuotesSimplified(options));
         //   List<Place> places=SkyScanner.getPlaces(market,query);
@@ -117,17 +95,12 @@ public class RestController {
         model.add(Link.of(uriString, "self-route-simplified_quote"));
         return ResponseEntity.ok(model);
     }
-
-    /**
-     * Gets options from Database based on logged in user
-     * @return ResponseEntity with Option in it.
-     * @throws Exception
-     */
     @GetMapping("/routes/simplequote/check")
     ResponseEntity<RepresentationModel<?>> simplifiedquotescheck() throws Exception {
         Options options2 = null;
+        RepresentationModel<?> model = null;
         try {
-            new RestController();
+            new Restcontroller();
             Statement stmt;
             ResultSet rs;
             stmt = Conn.createStatement();
@@ -146,12 +119,12 @@ public class RestController {
                 LocalDate dateto= LocalDate.parse(rs.getString("dateto"));
 
                 options2= new Options(id,userid,market,originplace,destination,distance,price,currency,direct,datefrom,dateto);
-
+                model = CollectionModel.of(SkyScanner.getQuotesSimplified(options2));
             }
         } catch (SQLException exc) {
             exc.printStackTrace();
         }
-        RepresentationModel<?> model = CollectionModel.of(SkyScanner.getQuotesSimplified(options2));
+     
         //   List<Place> places=SkyScanner.getPlaces(market,query);
         final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
         model.add(Link.of(uriString, "self-route-simplified_quote"));
@@ -160,7 +133,7 @@ public class RestController {
 
     @GetMapping("/routes/simplequote/add")
     ResponseEntity<RepresentationModel<?>> simplifiedquotesadd() throws Exception {
-        new RestController();
+        new Restcontroller();
         Statement statement=Conn.createStatement();
         String query = "INSERT INTO finalproject.options (userid, market, originplace, destinationplace, distance,price, currency, direct, datefrom,dateto)"+ " values (?, ?, ?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStmt = Conn.prepareStatement(query);
@@ -175,7 +148,7 @@ public class RestController {
         preparedStmt.setString(9, String.valueOf(options.getStart()));
         preparedStmt.setString(10, String.valueOf(options.getEnd()));
         preparedStmt.execute();
-        List <Options> optionsList= Collections.singletonList(options);
+        List <Options> optionsList=Collections.singletonList(options);
         repository.GetLoggedInUser().setOptionsList(optionsList);
         RepresentationModel<?> model = CollectionModel.of(repository.GetLoggedInUser());
         //   List<Place> places=SkyScanner.getPlaces(market,query);
