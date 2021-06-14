@@ -1,6 +1,6 @@
 # Web_Service_Final_Project
 FlightPlannerAPI
-FlightPlannerAPI is an API designed to help customers search cheapest flights around the world.
+FlightPlannerAPI is an API designed to help customers search cheapest flights around the world. Customers can register in the system save their recentlly searched flight template.
 
 #Getting Started
 Software used for the project.
